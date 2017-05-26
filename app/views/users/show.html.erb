@@ -1,0 +1,8 @@
+<h1><%= @user.name %>, <%= @user.email %></h1>
+<% if signed_in? %>
+  <%= link_to "Sign out", signout_path, method: "delete" %>
+<% else %>
+  <%= link_to "Sign in", signin_path %>
+<% end %>
+<p><%= link_to "New test", signup_path %></p>
+<p><%= link_to "History", signup_path %></p>
