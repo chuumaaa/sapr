@@ -17,35 +17,27 @@
             <%= link_to "Scanner by Kasyak", root_path, class: "mdl-navigation__link logo"%>              
           </span>
           <!-- Add spacer, to align navigation to the right -->
-          <div class="mdl-layout-spacer"></div>
+          <div class="mdl-layout-spacer">
+            <% if signed_in? %>
+             <p id="userName-label"> Hi, <%= current_user.name %>! </p>
+            <% end %>  
+          </div>
           <!-- Navigation. We hide it in small screens. -->
           <nav class="mdl-navigation mdl-layout--large-screen-only">
-            <% if signed_in? %>              
-              <%= link_to "Account", "#", class: "mdl-navigation__link " %>
-              <%= link_to "Sign out", signout_path, method: "delete", class: "mdl-navigation__link" %></li>
-                         
+            <% if signed_in? %>
+              <%= link_to "Profile", current_user, class: "mdl-navigation__link " %>       
+              <%= link_to "Settings", edit_user_path(current_user), class: "mdl-navigation__link " %>
+              <%= link_to "Sign out", signout_path, method: "delete", class: "mdl-navigation__link" %>                   
             <% else %>
               <%= link_to "Sign in", signin_path, class: "mdl-navigation__link" %>
             <% end %>
           </nav>
         </div>
       </header>
-      <!-- <div class="mdl-layout__drawer">
-        <span class="mdl-layout-title">Scanner by Kasyak</span>
-        <nav class="mdl-navigation">
-          <a class="mdl-navigation__link" href="">Link</a>
-          <a class="mdl-navigation__link" href="">Link</a>
-          <a class="mdl-navigation__link" href="">Link</a>
-          <a class="mdl-navigation__link" href="">Link</a>
-        </nav>
-      </div> -->
-    
-    <main class="mdl-layout__content">
-        <% flash.each do |key, value| %>
-          <div class="alert alert-<%= key %>"><%= value %></div>
-        <% end %>
+          
+      <main class="mdl-layout__content">
         <%= yield %>
-    </main>
+      </main>
   </div>
   </body>
 </html>
