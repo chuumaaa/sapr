@@ -9,11 +9,43 @@
   </head>
 
   <body>
-  	<div class="container">
-      <% flash.each do |key, value| %>
-        <div class="alert alert-<%= key %>"><%= value %></div>
-      <% end %>
-      <%= yield %>
-    </div>
+    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+      <header class="mdl-layout__header">
+        <div class="mdl-layout__header-row">
+          <!-- Title -->
+          <span class="mdl-layout-title">          
+            <%= link_to "Scanner by Kasyak", root_path, class: "mdl-navigation__link logo"%>              
+          </span>
+          <!-- Add spacer, to align navigation to the right -->
+          <div class="mdl-layout-spacer"></div>
+          <!-- Navigation. We hide it in small screens. -->
+          <nav class="mdl-navigation mdl-layout--large-screen-only">
+            <% if signed_in? %>              
+              <%= link_to "Account", "#", class: "mdl-navigation__link " %>
+              <%= link_to "Sign out", signout_path, method: "delete", class: "mdl-navigation__link" %></li>
+                         
+            <% else %>
+              <%= link_to "Sign in", signin_path, class: "mdl-navigation__link" %>
+            <% end %>
+          </nav>
+        </div>
+      </header>
+      <!-- <div class="mdl-layout__drawer">
+        <span class="mdl-layout-title">Scanner by Kasyak</span>
+        <nav class="mdl-navigation">
+          <a class="mdl-navigation__link" href="">Link</a>
+          <a class="mdl-navigation__link" href="">Link</a>
+          <a class="mdl-navigation__link" href="">Link</a>
+          <a class="mdl-navigation__link" href="">Link</a>
+        </nav>
+      </div> -->
+    
+    <main class="mdl-layout__content">
+        <% flash.each do |key, value| %>
+          <div class="alert alert-<%= key %>"><%= value %></div>
+        <% end %>
+        <%= yield %>
+    </main>
+  </div>
   </body>
 </html>
