@@ -8,11 +8,13 @@ class UsersController < ApplicationController
 
   def create
     @user = User.new(user_params)
-    if @user.save
-      sign_in @user
-      redirect_to @user
-    else
-      render 'new'
+    respond_to do |format|
+      if @user.save
+        sign_in @user
+        format.html {redirect_to @user , success: 'User was successfully created.'}
+      else
+        format.html{ render :new, warning: 'Fields can\'t be blank.'}
+      end
     end
   end
 
@@ -24,12 +26,15 @@ class UsersController < ApplicationController
     @user = User.find(params[:id])    
   end
 
+
   def update
     @user = User.find(params[:id])
-    if @user.update_attributes(user_params)
-      redirect_to @user
-    else
-      render 'edit'
+    respond_to do |format|
+      if @user.update_attributes(user_params)
+        format.html {redirect_to @user , success: 'User was successfully updated.'}
+      else
+        format.html{ render :edit, warning: 'Fields can\'t be blank.'}
+      end
     end
   end
 

@@ -24,7 +24,7 @@
 
 .user-action-card{
 	width: 75%;
-	margin: auto 12.5%;
+	margin: 0 12.5%;
 }
 .test-action-card{
 	width: 87%;
@@ -38,4 +38,26 @@
 			color: black;
 		}
 	}
+}
+.alert{
+	display: block;
+	position: fixed;
+	top: 12%;
+	right: 5%;
+	z-index: 1001;
+	padding: 15px;
+	color: white;
+	font-size: 16px;
+	border-radius: 3px;
+	opacity: 0.8;
+	&-success{
+		background-color: #1dd300;		
+	}
+	&-warning{
+		background-color: #ea0037;
+	}
+}
+
+#error_explanation{
+	color: red
 }

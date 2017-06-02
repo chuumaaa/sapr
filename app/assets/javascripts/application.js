@@ -15,3 +15,12 @@
 //= require turbolinks
 //= require_tree .
 //= require material
+$(document).ready(function () {
+
+});
+
+
+
+
+
+

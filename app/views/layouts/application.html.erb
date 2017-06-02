@@ -37,6 +37,12 @@
           
       <main class="mdl-layout__content">
         <%= yield %>
+      <% flash.each do |key, value| %>
+        <div class="alert alert-<%= key %> mdl-shadow--4dp"><%= value %></div>
+      <% end %>
+      <script type="text/javascript">
+        setTimeout(function() {$('.alert').fadeOut(3000) }, 1500);
+      </script>
       </main>
   </div>
   </body>
