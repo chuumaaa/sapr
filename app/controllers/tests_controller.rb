@@ -27,8 +27,9 @@ class TestsController < ApplicationController
   # POST /tests.json
   def create
     @test = current_user.test.new(test_params)
-
+    
     respond_to do |format|
+      xss_test
       if @test.save
         format.html { redirect_to @test, success: 'Test was successfully created.' }
         format.json { render :show, status: :created, location: @test }
@@ -41,9 +42,11 @@ class TestsController < ApplicationController
 
   # PATCH/PUT /tests/1
   # PATCH/PUT /tests/1.json
-  def update
+  def update    
+    xss_test
     respond_to do |format|
       if @test.update(test_params)
+        
         format.html { redirect_to @test, success: 'Test was successfully updated.' }
         format.json { render :show, status: :ok, location: @test }
       else
@@ -71,6 +74,21 @@ class TestsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def test_params
-      params.require(:test).permit(:name, :path, :description, :report_data)
+      params.require(:test).permit(:name, :path, :description)
+    end
+
+    def get_payload
+      "<script>document.write(\"<ssx>true</ssx>\")</script>"
+    end
+
+    def xss_test
+      url = URI::parse(@test.path)
+      page = Nokogiri::HTML(open("#{url}?#{get_payload}"))
+      content = page.xpath("//ssx").collect(&:text)
+      if content.include? "true" 
+        @test.report_data = "XSS-attack test : failed.\nSQL-injection test : passed.\nAdvice : kiss of your programmers and take into Dimon Cherkashin."
+      else
+        @test.report_data = "XSS-attack test : passed.\nSQL-injection test : passed."      
+      end
     end
 end
