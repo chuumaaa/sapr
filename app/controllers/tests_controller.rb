@@ -45,8 +45,7 @@ class TestsController < ApplicationController
   def update    
     xss_test
     respond_to do |format|
-      if @test.update(test_params)
-        
+      if @test.update(test_params)        
         format.html { redirect_to @test, success: 'Test was successfully updated.' }
         format.json { render :show, status: :ok, location: @test }
       else
@@ -66,6 +65,18 @@ class TestsController < ApplicationController
     end
   end
 
+  def download_pdf
+    @test = current_user.test.find(params[:test_id])
+    pdf = render_to_string pdf: "some_file_name", template: "tests/show.html.erb", encoding: "UTF-8"        
+    save_path = Rails.root.join('pdfs','Report.pdf')
+    File.open(save_path, 'wb') do |file|
+      file << pdf        
+    end
+    respond_to do |f| 
+      f.html { redirect_to @test, success: 'PDF file is downloaded.'}
+    end  
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_test
@@ -82,13 +93,20 @@ class TestsController < ApplicationController
     end
 
     def xss_test
-      url = URI::parse(@test.path)
-      page = Nokogiri::HTML(open("#{url}?#{get_payload}"))
-      content = page.xpath("//ssx").collect(&:text)
-      if content.include? "true" 
-        @test.report_data = "XSS-attack test : failed.\nSQL-injection test : passed.\nAdvice : kiss of your programmers and take into Dimon Cherkashin."
-      else
-        @test.report_data = "XSS-attack test : passed.\nSQL-injection test : passed."      
-      end
+      #begin
+        url = URI::parse(@test.path)
+        page = Nokogiri::HTML(open("#{url}?#{get_payload}"))
+        content = page.xpath("//ssx").collect(&:text)
+        if content.include? "true" 
+          @test.report_data = "XSS-attack test : failed.\nSQL-injection test : passed.\nAdvice : kiss of your programmers and take into Dimon Cherkashin."
+        else
+          @test.report_data = "XSS-attack test : passed.\nSQL-injection test : passed."      
+        end
+      #rescue => e
+      #  render 'edit' 
+      #  flash[:warning] = 'Error: #{e.message}'        
+      #end      
     end
+
+   
 end

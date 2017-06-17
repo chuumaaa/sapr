@@ -33,8 +33,12 @@ gem 'bcrypt', '~> 3.1.7'
 # Use MDL for style
 gem 'material_design_lite-sass'
 
-#Use Nokogiri and Open-uri for find Xss
+#Use Nokogiri for parse page
 gem 'nokogiri'
+
+#Use Wckd_PDF for convert html to pdf
+gem 'wicked_pdf'
+gem 'wkhtmltopdf-binary'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
